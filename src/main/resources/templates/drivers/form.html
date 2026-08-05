@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de motorista | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body><div class="app-shell"><aside th:replace="~{fragments/common :: sidebar('drivers')}"></aside><main class="main-content narrow"><header class="page-header"><div><span class="eyebrow">EQUIPE</span><h1 th:text="${editing ? 'Editar motorista' : 'Novo motorista'}">Novo motorista</h1><p>Dados essenciais para uma operação regularizada.</p></div></header>
+<section class="panel form-panel"><form th:object="${driverForm}" th:action="${editing} ? @{/drivers/{id}(id=${driverId})} : @{/drivers}" method="post"><div class="form-errors" th:if="${#fields.hasAnyErrors()}"><strong>Revise os dados:</strong><ul><li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li></ul></div><div class="form-grid"><label class="span-2">Nome completo<input th:field="*{name}"></label><label>Número da CNH<input th:field="*{licenseNumber}"></label><label>Categoria<input th:field="*{licenseCategory}" placeholder="B ou AB"></label><label>Validade da CNH<input type="date" th:field="*{licenseExpiry}"></label><label>Telefone<input th:field="*{phone}" placeholder="(54) 99999-9999"></label><label class="checkbox span-2"><input type="checkbox" th:field="*{active}"> Motorista ativo</label></div><div class="form-actions"><a class="button ghost" th:href="@{/drivers}">Cancelar</a><button class="button primary" type="submit">Salvar motorista</button></div></form></section>
+</main></div></body></html>

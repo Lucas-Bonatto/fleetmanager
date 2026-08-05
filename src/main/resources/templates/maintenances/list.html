@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manutenções | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body><div class="app-shell"><aside th:replace="~{fragments/common :: sidebar('maintenances')}"></aside><main class="main-content"><header class="page-header"><div><span class="eyebrow">OFICINA</span><h1>Manutenções preventivas</h1><p>Alertas combinam calendário e quilometragem real.</p></div><a class="button primary" th:href="@{/maintenances/new}">+ Nova manutenção</a></header><div th:replace="~{fragments/common :: alerts}"></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Veículo</th><th>Serviço</th><th>Última execução</th><th>Próxima data</th><th>Próximo km</th><th>Status</th><th></th></tr></thead><tbody><tr th:each="view : ${maintenances}"><td><strong class="plate" th:text="${view.maintenance.vehicle.plate}">ABC1D23</strong><small th:text="|${#numbers.formatInteger(view.maintenance.vehicle.currentKm, 1, 'POINT')} km atuais|">0 km</small></td><td><strong th:text="${view.maintenance.description}">Revisão</strong><small th:text="${view.maintenance.type.label}">Tipo</small></td><td th:text="${view.maintenance.performedAt != null ? #temporals.format(view.maintenance.performedAt, 'dd/MM/yyyy') : 'Não informada'}">Data</td><td th:text="${view.maintenance.nextDueDate != null ? #temporals.format(view.maintenance.nextDueDate, 'dd/MM/yyyy') : '—'}">Data</td><td th:text="${view.maintenance.nextDueKm != null ? #numbers.formatInteger(view.maintenance.nextDueKm, 1, 'POINT') + ' km' : '—'}">Km</td><td><span class="badge" th:classappend="|badge-${#strings.toLowerCase(view.status.name())}|" th:text="${view.status.label}">Status</span></td><td class="actions"><a class="button ghost small" th:href="@{/maintenances/{id}/edit(id=${view.maintenance.id})}">Editar</a><form th:action="@{/maintenances/{id}/delete(id=${view.maintenance.id})}" method="post" onsubmit="return confirm('Remover esta manutenção?')"><button class="button danger-button small" type="submit">Excluir</button></form></td></tr><tr th:if="${#lists.isEmpty(maintenances)}"><td colspan="7" class="empty">Nenhuma manutenção cadastrada.</td></tr></tbody></table></div></section>
+</main></div></body></html>

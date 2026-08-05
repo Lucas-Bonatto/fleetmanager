@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/common :: sidebar('dashboard')}"></aside>
+    <main class="main-content">
+        <header class="page-header">
+            <div><span class="eyebrow">VISÃO OPERACIONAL</span><h1>Dashboard da frota</h1><p>Alertas financeiros e mecânicos em um único painel.</p></div>
+            <a class="button primary" th:href="@{/vehicles/new}">+ Novo veículo</a>
+        </header>
+        <div th:replace="~{fragments/common :: alerts}"></div>
+
+        <section class="cards">
+            <article class="metric-card"><span>Veículos cadastrados</span><strong th:text="${summary.totalVehicles}">0</strong><small th:text="|${summary.activeVehicles} ativos|">0 ativos</small></article>
+            <article class="metric-card danger"><span>Tributos atrasados</span><strong th:text="${summary.overdueTaxes}">0</strong><small>Exigem regularização</small></article>
+            <article class="metric-card warning"><span>Manutenções em alerta</span><strong th:text="${summary.upcomingMaintenances}">0</strong><small>Próximas ou vencidas</small></article>
+            <article class="metric-card"><span>Valor pendente</span><strong th:text="${#numbers.formatCurrency(summary.pendingTaxAmount)}">R$ 0,00</strong><small>Tributos ainda não pagos</small></article>
+        </section>
+
+        <section class="dashboard-grid">
+            <article class="panel">
+                <div class="panel-header"><div><h2>Tributos prioritários</h2><p>Ordenados pela data de vencimento.</p></div><a th:href="@{/taxes}">Ver todos</a></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Veículo</th><th>Tributo</th><th>Vencimento</th><th>Status</th></tr></thead>
+                        <tbody>
+                        <tr th:each="view : ${taxes}">
+                            <td><strong th:text="${view.tax.vehicle.plate}">ABC1D23</strong><small th:text="|${view.tax.vehicle.brand} ${view.tax.vehicle.model}|">Modelo</small></td>
+                            <td th:text="${view.tax.description}">IPVA</td>
+                            <td th:text="${#temporals.format(view.tax.dueDate, 'dd/MM/yyyy')}">01/01/2026</td>
+                            <td><span class="badge" th:classappend="|badge-${#strings.toLowerCase(view.status.name())}|" th:text="${view.status.label}">Status</span></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(taxes)}"><td colspan="4" class="empty">Nenhum tributo cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header"><div><h2>Radar de manutenção</h2><p>Alertas por data e quilometragem.</p></div><a th:href="@{/maintenances}">Ver todos</a></div>
+                <div class="maintenance-list">
+                    <div class="maintenance-item" th:each="view : ${maintenances}">
+                        <div><strong th:text="${view.maintenance.description}">Revisão</strong><span th:text="|${view.maintenance.vehicle.plate} · ${view.maintenance.vehicle.brand} ${view.maintenance.vehicle.model}|">Veículo</span></div>
+                        <span class="badge" th:classappend="|badge-${#strings.toLowerCase(view.status.name())}|" th:text="${view.status.label}">Status</span>
+                    </div>
+                    <p class="empty" th:if="${#lists.isEmpty(maintenances)}">Nenhuma manutenção cadastrada.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

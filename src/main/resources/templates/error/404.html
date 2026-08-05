@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="error-page"><main><span class="error-code">404</span><h1>Página não encontrada</h1><p th:text="${message ?: 'O endereço solicitado não existe ou o registro foi removido.'}">O endereço solicitado não existe ou o registro foi removido.</p><a class="button primary" th:href="@{/}">Voltar ao dashboard</a></main></body></html>

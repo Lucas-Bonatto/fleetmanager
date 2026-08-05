@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veículos | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body><div class="app-shell"><aside th:replace="~{fragments/common :: sidebar('vehicles')}"></aside><main class="main-content">
+<header class="page-header"><div><span class="eyebrow">FROTA</span><h1>Veículos</h1><p>Cadastro, responsável e quilometragem atual.</p></div><a class="button primary" th:href="@{/vehicles/new}">+ Novo veículo</a></header>
+<div th:replace="~{fragments/common :: alerts}"></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Placa</th><th>Veículo</th><th>Ano</th><th>Quilometragem</th><th>Motorista</th><th>Status</th><th></th></tr></thead><tbody>
+<tr th:each="vehicle : ${vehicles}"><td><strong class="plate" th:text="${vehicle.plate}">ABC1D23</strong></td><td><strong th:text="|${vehicle.brand} ${vehicle.model}|">Veículo</strong></td><td th:text="${vehicle.modelYear}">2026</td><td th:text="|${#numbers.formatInteger(vehicle.currentKm, 1, 'POINT')} km|">0 km</td><td th:text="${vehicle.driver != null ? vehicle.driver.name : 'Não atribuído'}">Motorista</td><td><span class="badge" th:classappend="|badge-${#strings.toLowerCase(vehicle.status.name())}|" th:text="${vehicle.status.label}">Ativo</span></td><td class="actions"><a class="button ghost small" th:href="@{/vehicles/{id}/edit(id=${vehicle.id})}">Editar</a><form th:action="@{/vehicles/{id}/delete(id=${vehicle.id})}" method="post" onsubmit="return confirm('Remover este veículo?')"><button class="button danger-button small" type="submit">Excluir</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(vehicles)}"><td colspan="7" class="empty">Nenhum veículo cadastrado.</td></tr></tbody></table></div></section>
+</main></div></body></html>

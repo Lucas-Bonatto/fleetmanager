@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motoristas | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body><div class="app-shell"><aside th:replace="~{fragments/common :: sidebar('drivers')}"></aside><main class="main-content">
+<header class="page-header"><div><span class="eyebrow">EQUIPE</span><h1>Motoristas</h1><p>Controle de CNH, categoria e validade.</p></div><a class="button primary" th:href="@{/drivers/new}">+ Novo motorista</a></header><div th:replace="~{fragments/common :: alerts}"></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Nome</th><th>CNH</th><th>Categoria</th><th>Validade</th><th>Contato</th><th>Status</th><th></th></tr></thead><tbody><tr th:each="driver : ${drivers}"><td><strong th:text="${driver.name}">Nome</strong></td><td th:text="${driver.licenseNumber}">CNH</td><td th:text="${driver.licenseCategory}">B</td><td th:text="${#temporals.format(driver.licenseExpiry, 'dd/MM/yyyy')}">01/01/2028</td><td th:text="${driver.phone ?: 'Não informado'}">Telefone</td><td><span class="badge" th:classappend="${driver.active} ? 'badge-active' : 'badge-inactive'" th:text="${driver.active ? 'Ativo' : 'Inativo'}">Ativo</span></td><td class="actions"><a class="button ghost small" th:href="@{/drivers/{id}/edit(id=${driver.id})}">Editar</a><form th:action="@{/drivers/{id}/delete(id=${driver.id})}" method="post" onsubmit="return confirm('Remover este motorista?')"><button class="button danger-button small" type="submit">Excluir</button></form></td></tr><tr th:if="${#lists.isEmpty(drivers)}"><td colspan="7" class="empty">Nenhum motorista cadastrado.</td></tr></tbody></table></div></section>
+</main></div></body></html>

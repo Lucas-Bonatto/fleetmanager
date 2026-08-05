@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de veículo | FleetManager</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body><div class="app-shell"><aside th:replace="~{fragments/common :: sidebar('vehicles')}"></aside><main class="main-content narrow">
+<header class="page-header"><div><span class="eyebrow">FROTA</span><h1 th:text="${editing ? 'Editar veículo' : 'Novo veículo'}">Novo veículo</h1><p>Mantenha a quilometragem atualizada para alimentar os alertas.</p></div></header>
+<section class="panel form-panel"><form th:object="${vehicleForm}" th:action="${editing} ? @{/vehicles/{id}(id=${vehicleId})} : @{/vehicles}" method="post">
+<div class="form-errors" th:if="${#fields.hasAnyErrors()}"><strong>Revise os dados:</strong><ul><li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li></ul></div>
+<div class="form-grid"><label>Placa<input th:field="*{plate}" placeholder="ABC1D23" maxlength="10"></label><label>Marca<input th:field="*{brand}" placeholder="Ford"></label><label class="span-2">Modelo<input th:field="*{model}" placeholder="Ranger Limited"></label><label>Ano<input type="number" th:field="*{modelYear}" min="1950" max="2100"></label><label>Quilometragem<input type="number" th:field="*{currentKm}" min="0"></label><label>Status<select th:field="*{status}"><option th:each="status : ${statuses}" th:value="${status}" th:text="${status.label}"></option></select></label><label>Motorista<select th:field="*{driverId}"><option value="">Não atribuído</option><option th:each="driver : ${drivers}" th:value="${driver.id}" th:text="${driver.name}"></option></select></label></div>
+<div class="form-actions"><a class="button ghost" th:href="@{/vehicles}">Cancelar</a><button class="button primary" type="submit">Salvar veículo</button></div></form></section>
+</main></div></body></html>

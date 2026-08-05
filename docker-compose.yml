@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: fleetmanager-postgres
+    environment:
+      POSTGRES_DB: fleetmanager
+      POSTGRES_USER: fleetmanager
+      POSTGRES_PASSWORD: fleetmanager
+    ports:
+      - "5432:5432"
+    volumes:
+      - fleetmanager_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fleetmanager -d fleetmanager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  fleetmanager_data:
