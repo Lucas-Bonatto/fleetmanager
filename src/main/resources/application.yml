@@ -1,11 +1,13 @@
 spring:
   application:
     name: fleetmanager
+
   datasource:
     url: jdbc:h2:file:./data/fleetmanager;AUTO_SERVER=TRUE
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,12 +15,20 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
   thymeleaf:
     cache: false
+
   h2:
     console:
       enabled: true
       path: /h2-console
+
+app:
+  security:
+    admin:
+      username: ${ADMIN_USERNAME:admin}
+      password: ${ADMIN_PASSWORD:Controle@123}
 
 server:
   port: ${PORT:8080}
@@ -27,20 +37,31 @@ server:
       enabled: false
 
 ---
+
 spring:
   config:
     activate:
       on-profile: prod
+
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/fleetmanager}
     username: ${DATABASE_USERNAME:fleetmanager}
     password: ${DATABASE_PASSWORD:fleetmanager}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+
   thymeleaf:
     cache: true
+
   h2:
     console:
       enabled: false
+
+app:
+  security:
+    admin:
+      username: ${ADMIN_USERNAME}
+      password: ${ADMIN_PASSWORD}

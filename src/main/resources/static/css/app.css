@@ -109,3 +109,28 @@ textarea { resize: vertical; }
     .form-actions { flex-direction: column-reverse; }
     .form-actions .button { width: 100%; }
 }
+.logout-form {
+    margin: 8px 0 0;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: #b8c5c2;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: #ffffff;
+    transform: translateX(2px);
+}

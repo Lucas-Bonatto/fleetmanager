@@ -9,3 +9,8 @@ spring:
       ddl-auto: create-drop
   thymeleaf:
     cache: false
+app:
+  security:
+    admin:
+      username: admin-teste
+      password: "SenhaTeste@123"

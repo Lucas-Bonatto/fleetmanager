@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Controle de Frotas</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0c3027;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 36px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            background: #d6f34e;
+            color: #0c3027;
+            font-weight: bold;
+        }
+
+        .brand strong,
+        .brand small {
+            display: block;
+        }
+
+        .brand small {
+            margin-top: 3px;
+            color: #687873;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .description {
+            margin: 0 0 26px;
+            color: #687873;
+            line-height: 1.5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #cad7d3;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 3px solid rgba(8, 112, 92, 0.15);
+            border-color: #08705c;
+        }
+
+        button {
+            height: 49px;
+            border: 0;
+            border-radius: 10px;
+            background: #08705c;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #065a4a;
+        }
+
+        .message {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 9px;
+        }
+
+        .error {
+            color: #8a3030;
+            background: #fff0f0;
+        }
+
+        .success {
+            color: #176247;
+            background: #e8f6f0;
+        }
+
+        .restricted {
+            margin: 22px 0 0;
+            color: #899591;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="login-card">
+
+    <div class="brand">
+        <div class="brand-mark">CF</div>
+
+        <div>
+            <strong>Controle de Frotas</strong>
+            <small>Gestão veicular</small>
+        </div>
+    </div>
+
+    <h1>Acessar o sistema</h1>
+
+    <p class="description">
+        Digite suas credenciais administrativas para continuar.
+    </p>
+
+    <div class="message error" th:if="${param.error}">
+        Usuário ou senha inválidos.
+    </div>
+
+    <div class="message success" th:if="${param.logout}">
+        Sessão encerrada com sucesso.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+
+        <label>
+            Usuário
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Digite seu usuário"
+                autocomplete="username"
+                required
+                autofocus
+            >
+        </label>
+
+        <label>
+            Senha
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                required
+            >
+        </label>
+
+        <button type="submit">
+            Entrar
+        </button>
+
+    </form>
+
+    <p class="restricted">
+        Acesso restrito aos administradores.
+    </p>
+
+</section>
+
+</body>
+</html>

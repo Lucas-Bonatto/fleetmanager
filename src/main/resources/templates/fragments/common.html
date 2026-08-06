@@ -1,25 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <body>
-<aside class="sidebar" th:fragment="sidebar(activePage)">
-    <a class="brand" th:href="@{/}">
+
+<aside
+    class="sidebar"
+    th:fragment="sidebar(activePage)"
+>
+    <a
+        class="brand"
+        th:href="@{/}"
+    >
         <span class="brand-mark">CF</span>
 
-         <span><strong>Controle de Frotas</strong><small>Gestão veicular</small></span>
+        <span>
+            <strong>Controle de Frotas</strong>
+            <small>Gestão veicular</small>
+        </span>
     </a>
+
     <nav class="nav">
-        <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? 'active' : ''">▦ Dashboard</a>
-        <a th:href="@{/vehicles}" th:classappend="${activePage == 'vehicles'} ? 'active' : ''">🚙 Veículos</a>
-        <a th:href="@{/drivers}" th:classappend="${activePage == 'drivers'} ? 'active' : ''">♙ Motoristas</a>
-        <a th:href="@{/taxes}" th:classappend="${activePage == 'taxes'} ? 'active' : ''">▤ Tributos</a>
-        <a th:href="@{/maintenances}" th:classappend="${activePage == 'maintenances'} ? 'active' : ''">⚙ Manutenções</a>
+
+        <a
+            th:href="@{/}"
+            th:classappend="${activePage == 'dashboard'} ? 'active' : ''"
+        >
+            ▦ Dashboard
+        </a>
+
+        <a
+            th:href="@{/vehicles}"
+            th:classappend="${activePage == 'vehicles'} ? 'active' : ''"
+        >
+            🚙 Veículos
+        </a>
+
+        <a
+            th:href="@{/drivers}"
+            th:classappend="${activePage == 'drivers'} ? 'active' : ''"
+        >
+            ♙ Motoristas
+        </a>
+
+        <a
+            th:href="@{/taxes}"
+            th:classappend="${activePage == 'taxes'} ? 'active' : ''"
+        >
+            ▤ Tributos
+        </a>
+
+        <a
+            th:href="@{/maintenances}"
+            th:classappend="${activePage == 'maintenances'} ? 'active' : ''"
+        >
+            ⚙ Manutenções
+        </a>
+
+        <form
+            class="logout-form"
+            th:action="@{/logout}"
+            method="post"
+        >
+            <button
+                class="logout-button"
+                type="submit"
+            >
+                ↪ Sair
+            </button>
+        </form>
+
     </nav>
-    <div class="sidebar-footer">MVP Fullstack · Java + Spring</div>
+
+    <div class="sidebar-footer">
+        MVP Fullstack · Java + Spring
+    </div>
 </aside>
 
-<div th:fragment="alerts" class="alerts">
-    <div class="alert success" th:if="${success}" th:text="${success}"></div>
-    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+<div
+    th:fragment="alerts"
+    class="alerts"
+>
+    <div
+        class="alert success"
+        th:if="${success}"
+        th:text="${success}"
+    ></div>
+
+    <div
+        class="alert error"
+        th:if="${error}"
+        th:text="${error}"
+    ></div>
 </div>
+
 </body>
 </html>
