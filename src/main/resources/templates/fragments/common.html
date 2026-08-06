@@ -3,8 +3,9 @@
 <body>
 <aside class="sidebar" th:fragment="sidebar(activePage)">
     <a class="brand" th:href="@{/}">
-        <span class="brand-mark">FM</span>
-        <span><strong>FleetManager</strong><small>Gestão de frotas</small></span>
+        <span class="brand-mark">CF</span>
+
+         <span><strong>Controle de Frotas</strong><small>Gestão veicular</small></span>
     </a>
     <nav class="nav">
         <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? 'active' : ''">▦ Dashboard</a>

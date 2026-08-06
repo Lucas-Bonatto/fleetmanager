@@ -21,6 +21,7 @@ spring:
       path: /h2-console
 
 server:
+  port: ${PORT:8080}
   error:
     whitelabel:
       enabled: false
