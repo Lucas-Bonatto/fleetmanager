@@ -1,137 +1,255 @@
-# FleetManager 🚙
+# Controle de Frotas 🚙
 
-Aplicação web Fullstack para centralizar a gestão operacional e financeira de frotas automotivas. O sistema substitui planilhas dispersas por cadastros estruturados, alertas de tributos e previsões de manutenção baseadas em data e quilometragem.
+Sistema web Fullstack desenvolvido para centralizar a gestão operacional e financeira de frotas automotivas.
 
-## Funcionalidades do MVP
+O projeto substitui planilhas dispersas por uma aplicação estruturada, permitindo o cadastro de veículos e motoristas, controle de tributos, acompanhamento de manutenções preventivas e visualização de alertas em um dashboard responsivo.
 
-- Dashboard com indicadores da frota e alertas prioritários.
-- CRUD de veículos e motoristas.
+## 🌐 Aplicação publicada
+
+A aplicação está hospedada no Railway e utiliza conexão segura por HTTPS:
+
+### [Acessar o Controle de Frotas](https://controle-de-frotas.up.railway.app)
+
+> O ambiente público possui acesso protegido por autenticação.  
+> As credenciais administrativas não são divulgadas no repositório.
+
+## 📋 Funcionalidades
+
+- Dashboard com indicadores gerais da frota.
+- Cadastro, edição, consulta e exclusão de veículos.
+- Cadastro e gerenciamento de motoristas.
+- Associação entre veículos e motoristas.
 - Controle de IPVA, licenciamento, seguros, multas e outros tributos.
-- Status financeiro calculado e priorizado no backend: **Pago**, **Atrasado**, **Vencimento próximo** e **No prazo**.
-- Histórico e previsão de manutenções por calendário e quilometragem, com validação cronológica.
-- Alertas de manutenção: **Vencida**, **Próxima** e **Em dia**.
-- Interface responsiva renderizada com Thymeleaf.
-- Dados demonstrativos automáticos no perfil de desenvolvimento.
-- Banco H2 para execução local e perfil pronto para PostgreSQL.
-- Testes unitários das regras centrais e pipeline de CI com GitHub Actions.
+- Registro e acompanhamento de manutenções preventivas.
+- Controle de manutenções por data e quilometragem.
+- Alertas automáticos de tributos e manutenções.
+- Validação para impedir a redução acidental do hodômetro.
+- Login administrativo com Spring Security.
+- Logout seguro com encerramento da sessão.
+- Interface responsiva para computadores e dispositivos móveis.
+- Banco PostgreSQL no ambiente público.
+- Banco H2 para desenvolvimento local.
+- Tratamento global de exceções.
+- Testes automatizados das regras de negócio.
 
-## Tecnologias
+## 🚦 Status dos tributos
+
+O sistema calcula automaticamente o status de cada tributo:
+
+- **Pago:** pagamento registrado.
+- **Atrasado:** vencimento ultrapassado e pagamento pendente.
+- **Vencimento próximo:** faltam até 15 dias para o vencimento.
+- **No prazo:** tributo pendente fora da janela de alerta.
+
+## 🔧 Status das manutenções
+
+As manutenções são avaliadas por data e quilometragem:
+
+- **Vencida:** prazo ou quilometragem limite ultrapassados.
+- **Próxima:** faltam até 30 dias ou até 1.000 km.
+- **Em dia:** nenhuma condição de alerta foi atingida.
+
+## 🛠️ Tecnologias utilizadas
+
+### Backend
 
 - Java 21
-- Spring Boot 4.1.0
+- Spring Boot
 - Spring MVC
-- Spring Data JPA / Hibernate
-- Thymeleaf
+- Spring Security
+- Spring Data JPA
+- Hibernate
 - Bean Validation
-- H2 e PostgreSQL
 - Maven
-- JUnit 5 / AssertJ
 
-## Arquitetura
+### Frontend
+
+- HTML5
+- CSS3
+- Thymeleaf
+- Layout responsivo
+
+### Banco de dados
+
+- PostgreSQL no ambiente de produção
+- H2 no ambiente local
+
+### Infraestrutura
+
+- Git e GitHub
+- Railway
+- GitHub Actions
+- Docker Compose
+
+## 🏗️ Arquitetura
+
+O projeto utiliza o padrão arquitetural MVC, com separação de responsabilidades entre controllers, services, repositories, entidades e DTOs.
 
 ```mermaid
 flowchart LR
-    UI[Thymeleaf / HTML / CSS] --> C[Controllers]
+    UI[Thymeleaf / HTML / CSS] --> SEC[Spring Security]
+    SEC --> C[Controllers]
     C --> S[Services e regras de negócio]
     S --> R[Spring Data Repositories]
     R --> DB[(H2 / PostgreSQL)]
     S --> DTO[DTOs e View Models]
 ```
 
+Estrutura principal:
+
 ```text
 src/main/java/br/com/fleetmanager
-├── config          # carga de dados de demonstração
+├── config          # configurações, segurança e dados de desenvolvimento
 ├── domain          # entidades e enums
 ├── exception       # exceções de domínio
-├── repository      # persistência Spring Data JPA
-├── service         # regras de negócio e status
+├── repository      # persistência com Spring Data JPA
+├── service         # regras de negócio
 └── web             # controllers, DTOs e view models
 ```
 
-## Regras de alerta
+## 🔐 Segurança
 
-### Tributos
+Todas as páginas do sistema, exceto a tela de login e os arquivos estáticos, exigem autenticação.
 
-- **Pago:** pagamento marcado como realizado.
-- **Atrasado:** não pago e vencimento anterior à data atual.
-- **Vencimento próximo:** não pago e faltam até 15 dias.
-- **No prazo:** não pago e fora da janela de alerta.
+O sistema utiliza:
 
-### Manutenções
+- Spring Security;
+- senhas processadas com BCrypt;
+- proteção CSRF;
+- sessão autenticada;
+- logout por requisição POST;
+- credenciais de produção armazenadas em variáveis de ambiente;
+- conexão HTTPS no ambiente público.
 
-- **Vencida:** data ultrapassada ou quilometragem limite atingida.
-- **Próxima:** faltam até 30 dias ou até 1.000 km.
-- **Em dia:** nenhuma janela de alerta foi atingida.
+Nenhuma senha do ambiente público é armazenada no código-fonte ou no GitHub.
 
-## Executando localmente
+## 💻 Executando localmente
 
 ### Pré-requisitos
 
 - JDK 21
-- Maven 3.6.3 ou superior
+- Maven 3.9 ou superior
+- Git
+
+Clone o repositório:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/fleetmanager.git
+git clone https://github.com/Lucas-Bonatto/fleetmanager.git
 cd fleetmanager
-mvn spring-boot:run
 ```
 
-Acesse:
-
-- Aplicação: `http://localhost:8080`
-- Console H2: `http://localhost:8080/h2-console`
-- JDBC URL: `jdbc:h2:file:./data/fleetmanager`
-- Usuário: `sa`
-- Senha: vazia
-
-## PostgreSQL com Docker
-
-```bash
-docker compose up -d
-mvn -Dspring-boot.run.profiles=prod spring-boot:run
-```
-
-No perfil `prod`, as variáveis abaixo podem substituir os valores padrão:
-
-```bash
-DATABASE_URL=jdbc:postgresql://localhost:5432/fleetmanager
-DATABASE_USERNAME=fleetmanager
-DATABASE_PASSWORD=fleetmanager
-```
-
-> O perfil de produção usa `ddl-auto: update` para facilitar a demonstração. Em uma implantação real, utilize migrações versionadas com Flyway ou Liquibase.
-
-## Publicando no GitHub
-
-Crie um repositório vazio chamado `fleetmanager` e execute:
-
-```bash
-git init
-git add .
-git commit -m "feat: cria MVP do FleetManager"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/fleetmanager.git
-git push -u origin main
-```
-
-## Testes
+Execute os testes:
 
 ```bash
 mvn clean test
 ```
 
-## Próximas evoluções
+Inicie a aplicação:
 
-- Autenticação e autorização com Spring Security.
+```bash
+mvn spring-boot:run
+```
+
+Acesse:
+
+```text
+http://localhost:8080
+```
+
+A aplicação redirecionará automaticamente para:
+
+```text
+http://localhost:8080/login
+```
+
+As credenciais locais podem ser alteradas por meio das variáveis:
+
+```bash
+ADMIN_USERNAME=seu_usuario
+ADMIN_PASSWORD=sua_senha
+```
+
+## 🗄️ PostgreSQL
+
+No ambiente de produção, a aplicação utiliza as seguintes variáveis:
+
+```bash
+SPRING_PROFILES_ACTIVE=prod
+DATABASE_URL=jdbc:postgresql://servidor:porta/banco
+DATABASE_USERNAME=usuario
+DATABASE_PASSWORD=senha
+ADMIN_USERNAME=usuario_administrativo
+ADMIN_PASSWORD=senha_administrativa
+```
+
+As informações reais são configuradas diretamente na plataforma de hospedagem e não são versionadas.
+
+## 🐳 PostgreSQL com Docker
+
+Para executar um PostgreSQL local:
+
+```bash
+docker compose up -d
+```
+
+Depois, inicie o sistema com o perfil de produção:
+
+```bash
+mvn -Dspring-boot.run.profiles=prod spring-boot:run
+```
+
+## 🧪 Testes
+
+Execute:
+
+```bash
+mvn clean test
+```
+
+O projeto possui testes para as principais regras de status de tributos e manutenções.
+
+O GitHub Actions também executa automaticamente os testes quando alterações são enviadas ao repositório.
+
+## 🚀 Deploy
+
+O deploy da aplicação é realizado automaticamente pelo Railway a partir da branch `main` do GitHub.
+
+Fluxo de publicação:
+
+```text
+Código local
+    ↓
+GitHub
+    ↓
+Railway
+    ↓
+Spring Boot
+    ↓
+PostgreSQL
+```
+
+Cada novo `push` para a branch principal inicia uma nova compilação e publicação.
+
+## 📌 Possíveis evoluções
+
+- Cadastro de diferentes usuários.
 - Perfis de administrador, gestor e motorista.
-- API REST documentada com OpenAPI.
+- Recuperação de senha.
 - Upload de documentos e comprovantes.
+- Controle de abastecimentos.
+- Cálculo de consumo médio.
+- Relatórios financeiros por veículo.
+- Exportação de relatórios em PDF.
 - Notificações por e-mail ou WhatsApp.
-- Abastecimentos e cálculo de consumo médio.
-- Relatórios financeiros por veículo e período.
-- Migrações versionadas de banco com Flyway.
+- Migrações de banco com Flyway.
 - Testes de integração com Testcontainers.
 
-## Licença
+## 👨‍💻 Autor
+
+Desenvolvido por **Lucas Bonatto**.
+
+Projeto criado para estudo e portfólio, aplicando conceitos de desenvolvimento Fullstack, orientação a objetos, arquitetura MVC, persistência de dados, segurança e publicação em nuvem.
+
+## 📄 Licença
 
 Distribuído sob a licença MIT.
