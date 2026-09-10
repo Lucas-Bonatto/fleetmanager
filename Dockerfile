@@ -20,4 +20,4 @@ COPY --from=build --chown=spring:spring /workspace/target/fleetmanager-*.jar app
 USER spring:spring
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-XX:InitialRAMPercentage=20.0", "-XX:MaxRAMPercentage=50.0", "-jar", "app.jar"]
