@@ -6,10 +6,18 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    clean-disabled: true
+    validate-migration-naming: true
   thymeleaf:
     cache: false
 app:
+  seed:
+    enabled: false
   security:
     admin:
       username: admin-teste

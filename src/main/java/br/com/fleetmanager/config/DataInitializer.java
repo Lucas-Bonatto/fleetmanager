@@ -13,9 +13,9 @@ import br.com.fleetmanager.repository.TaxRepository;
 import br.com.fleetmanager.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public class DataInitializer {
 
     @Bean
-    @Profile("!prod")
+    @ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")
     CommandLineRunner seedData(DriverRepository drivers, VehicleRepository vehicles,
                                TaxRepository taxes, MaintenanceRepository maintenances) {
         return args -> {

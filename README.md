@@ -1,5 +1,7 @@
 # Controle de Frotas 🚙
 
+[![CI](https://github.com/Lucas-Bonatto/fleetmanager/actions/workflows/ci.yml/badge.svg)](https://github.com/Lucas-Bonatto/fleetmanager/actions/workflows/ci.yml)
+
 Sistema web Fullstack desenvolvido para centralizar a gestão operacional e financeira de frotas automotivas.
 
 O projeto substitui planilhas dispersas por uma aplicação estruturada, permitindo o cadastro de veículos e motoristas, controle de tributos, acompanhamento de manutenções preventivas e visualização de alertas em um dashboard responsivo.
@@ -59,6 +61,7 @@ As manutenções são avaliadas por data e quilometragem:
 - Spring Security
 - Spring Data JPA
 - Hibernate
+- Flyway
 - Bean Validation
 - Maven
 
@@ -79,6 +82,7 @@ As manutenções são avaliadas por data e quilometragem:
 - Git e GitHub
 - Railway
 - GitHub Actions
+- Docker
 - Docker Compose
 
 ## 🏗️ Arquitetura
@@ -175,14 +179,24 @@ No ambiente de produção, a aplicação utiliza as seguintes variáveis:
 
 ```bash
 SPRING_PROFILES_ACTIVE=prod
-DATABASE_URL=jdbc:postgresql://servidor:porta/banco
-DATABASE_USERNAME=usuario
-DATABASE_PASSWORD=senha
+PGHOST=servidor
+PGPORT=5432
+PGDATABASE=banco
+PGUSER=usuario
+PGPASSWORD=senha
 ADMIN_USERNAME=usuario_administrativo
 ADMIN_PASSWORD=senha_administrativa
 ```
 
-As informações reais são configuradas diretamente na plataforma de hospedagem e não são versionadas.
+No Railway, as cinco variáveis `PG*` devem ser referências ao serviço PostgreSQL, por exemplo `PGHOST=${{Postgres.PGHOST}}`. As informações reais são configuradas diretamente na plataforma e não são versionadas.
+
+### Migrações de banco
+
+O Flyway aplica as migrações de `src/main/resources/db/migration` antes de o Hibernate validar o schema. A aplicação usa `ddl-auto: validate`: produção nunca altera tabelas de forma implícita e um schema incompatível interrompe o deploy.
+
+Em um banco novo, mantenha `FLYWAY_BASELINE_ON_MIGRATE=false` (valor padrão) para executar a migração V1 normalmente.
+
+Para adotar o Flyway em um banco **já existente**, faça backup e defina `FLYWAY_BASELINE_ON_MIGRATE=true` somente no primeiro deploy. Isso registra o schema atual como versão 1 sem recriar tabelas; após o deploy validado, remova a variável. Não mantenha essa opção ativa permanentemente.
 
 ## 🐳 PostgreSQL com Docker
 
@@ -198,6 +212,12 @@ Depois, inicie o sistema com o perfil de produção:
 mvn -Dspring-boot.run.profiles=prod spring-boot:run
 ```
 
+Também é possível gerar a imagem da aplicação:
+
+```bash
+docker build -t fleetmanager .
+```
+
 ## 🧪 Testes
 
 Execute:
@@ -206,9 +226,9 @@ Execute:
 mvn clean test
 ```
 
-O projeto possui testes para as principais regras de status de tributos e manutenções.
+O projeto possui testes para as principais regras de status de tributos e manutenções e para a criação completa do schema pelo Flyway.
 
-O GitHub Actions também executa automaticamente os testes quando alterações são enviadas ao repositório.
+O GitHub Actions executa a suíte em H2 e repete a migração contra PostgreSQL 17 a cada alteração enviada ao repositório.
 
 ## 🚀 Deploy
 
@@ -230,6 +250,8 @@ PostgreSQL
 
 Cada novo `push` para a branch principal inicia uma nova compilação e publicação.
 
+O endpoint público `/actuator/health` é reservado ao healthcheck da plataforma e não expõe detalhes internos. No Railway, configure esse caminho como verificação de saúde antes de promover uma nova versão.
+
 ## 📌 Possíveis evoluções
 
 - Cadastro de diferentes usuários.
@@ -241,7 +263,6 @@ Cada novo `push` para a branch principal inicia uma nova compilação e publica�
 - Relatórios financeiros por veículo.
 - Exportação de relatórios em PDF.
 - Notificações por e-mail ou WhatsApp.
-- Migrações de banco com Flyway.
 - Testes de integração com Testcontainers.
 
 ## 👨‍💻 Autor
