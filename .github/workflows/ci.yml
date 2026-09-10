@@ -6,17 +6,63 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  unit-and-schema:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: temurin
           java-version: "21"
           cache: maven
       - name: Test
-        run: mvn --batch-mode clean test
+        run: mvn --batch-mode --no-transfer-progress clean verify
+      - name: Build production container
+        run: docker build --tag fleetmanager:ci .
+
+  postgres-migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: fleetmanager
+          POSTGRES_USER: fleetmanager
+          POSTGRES_PASSWORD: fleetmanager
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U fleetmanager -d fleetmanager"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Java 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Test Flyway migration against PostgreSQL
+        run: >-
+          mvn --batch-mode --no-transfer-progress
+          -Dtest=DatabaseMigrationTest
+          -Dspring.datasource.url=jdbc:postgresql://localhost:5432/fleetmanager
+          -Dspring.datasource.username=fleetmanager
+          -Dspring.datasource.password=fleetmanager
+          -Dspring.datasource.driver-class-name=org.postgresql.Driver
+          test

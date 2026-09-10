@@ -27,6 +27,8 @@ public class SecurityConfig {
                     "/css/**",
                     "/images/**",
                     "/favicon.ico",
+                    "/actuator/health",
+                    "/actuator/health/**",
                     "/error"
                 )
                 .permitAll()
