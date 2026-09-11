@@ -8,9 +8,9 @@ O projeto substitui planilhas dispersas por uma aplicação estruturada, permiti
 
 ## 🌐 Aplicação publicada
 
-A aplicação está hospedada no Railway e utiliza conexão segura por HTTPS:
+A aplicação está hospedada no alwaysdata, com Java 21, PostgreSQL 17 e HTTPS obrigatório:
 
-### [Acessar o Controle de Frotas](https://controle-de-frotas.up.railway.app)
+### [Acessar o Controle de Frotas](https://fleetmanager-lucasbonatto.alwaysdata.net)
 
 > O ambiente público possui acesso protegido por autenticação.  
 > As credenciais administrativas não são divulgadas no repositório.
@@ -80,7 +80,7 @@ As manutenções são avaliadas por data e quilometragem:
 ### Infraestrutura
 
 - Git e GitHub
-- Railway
+- alwaysdata
 - GitHub Actions
 - Docker
 - Docker Compose
@@ -188,7 +188,7 @@ ADMIN_USERNAME=usuario_administrativo
 ADMIN_PASSWORD=senha_administrativa
 ```
 
-No Railway, as cinco variáveis `PG*` devem ser referências ao serviço PostgreSQL, por exemplo `PGHOST=${{Postgres.PGHOST}}`. As informações reais são configuradas diretamente na plataforma e não são versionadas.
+Na hospedagem, as variáveis são configuradas diretamente na plataforma. Os valores reais, especialmente `PGPASSWORD` e `ADMIN_PASSWORD`, não são versionados nem exibidos nos exemplos do repositório.
 
 ### Migrações de banco
 
@@ -232,25 +232,25 @@ O GitHub Actions executa a suíte em H2 e repete a migração contra PostgreSQL 
 
 ## 🚀 Deploy
 
-O deploy da aplicação é realizado automaticamente pelo Railway a partir da branch `main` do GitHub.
+O ambiente público roda no alwaysdata como **User program**, conectado a uma instância PostgreSQL 17 da própria plataforma.
 
 Fluxo de publicação:
 
 ```text
-Código local
+GitHub Actions valida testes e migrações
     ↓
-GitHub
+Maven gera o JAR executável
     ↓
-Railway
+alwaysdata executa a aplicação com Java 21
     ↓
 Spring Boot
     ↓
-PostgreSQL
+PostgreSQL 17 + Flyway
 ```
 
-Cada novo `push` para a branch principal inicia uma nova compilação e publicação.
+O proxy da hospedagem força HTTPS, e a aplicação reconhece os cabeçalhos encaminhados para não gerar redirecionamentos inseguros. O processo utiliza limites explícitos da JVM e inicialização preguiçosa para funcionar com previsibilidade no ambiente compartilhado.
 
-O endpoint público `/actuator/health` é reservado ao healthcheck da plataforma e não expõe detalhes internos. No Railway, configure esse caminho como verificação de saúde antes de promover uma nova versão.
+O endpoint público `/actuator/health` é reservado ao healthcheck e não expõe detalhes internos. O procedimento reproduzível de publicação, validação e rollback está em [`docs/deploy-alwaysdata.md`](docs/deploy-alwaysdata.md).
 
 ## 📌 Possíveis evoluções
 

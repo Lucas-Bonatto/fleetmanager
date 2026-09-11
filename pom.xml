@@ -80,7 +80,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Banco PostgreSQL usado no Railway -->
+        <!-- Banco PostgreSQL usado em produção -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

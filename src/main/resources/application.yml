@@ -80,7 +80,7 @@ spring:
 
 app:
   seed:
-    enabled: false
+    enabled: ${APP_SEED_ENABLED:false}
   security:
     admin:
       username: ${ADMIN_USERNAME}
