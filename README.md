@@ -12,7 +12,8 @@ A aplicação está hospedada no alwaysdata, com Java 21, PostgreSQL 17 e HTTPS 
 
 ### [Acessar o Controle de Frotas](https://fleetmanager-lucasbonatto.alwaysdata.net)
 
-> O ambiente público possui acesso protegido por autenticação.  
+> O ambiente público possui acesso protegido por autenticação.
+>
 > As credenciais administrativas não são divulgadas no repositório.
 
 ## 📋 Funcionalidades
