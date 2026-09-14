@@ -3,6 +3,7 @@ package br.com.fleetmanager.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
                     "/login",
+                    "/demo-login",
                     "/css/**",
                     "/images/**",
                     "/favicon.ico",
@@ -32,8 +34,19 @@ public class SecurityConfig {
                     "/error"
                 )
                 .permitAll()
-                .anyRequest()
+                .requestMatchers("/logout")
                 .authenticated()
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/",
+                    "/vehicles",
+                    "/drivers",
+                    "/taxes",
+                    "/maintenances"
+                )
+                .hasAnyRole("ADMIN", "DEMO")
+                .anyRequest()
+                .hasRole("ADMIN")
             )
             .formLogin(form -> form
                 .loginPage("/login")

@@ -22,3 +22,5 @@ app:
     admin:
       username: admin-teste
       password: "SenhaTeste@123"
+    demo:
+      enabled: false

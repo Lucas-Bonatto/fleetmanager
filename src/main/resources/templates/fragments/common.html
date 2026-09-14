@@ -81,6 +81,14 @@
     class="alerts"
 >
     <div
+        class="alert info"
+        th:if="${readOnlyMode}"
+    >
+        <strong>Modo demonstração:</strong>
+        você pode explorar os dados, mas alterações estão desativadas.
+    </div>
+
+    <div
         class="alert success"
         th:if="${success}"
         th:text="${success}"

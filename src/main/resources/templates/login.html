@@ -113,6 +113,42 @@
             background: #065a4a;
         }
 
+        .demo-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #899591;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .demo-divider::before,
+        .demo-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #dfe7e4;
+        }
+
+        .demo-button {
+            border: 1px solid #9bc8bc;
+            background: #eaf6f2;
+            color: #0c5c4c;
+        }
+
+        .demo-button:hover {
+            background: #d9eee7;
+        }
+
+        .demo-copy {
+            margin: 0;
+            color: #687873;
+            font-size: 13px;
+            line-height: 1.45;
+            text-align: center;
+        }
+
         .message {
             margin-bottom: 18px;
             padding: 12px;
@@ -198,8 +234,27 @@
 
     </form>
 
+    <div class="demo-divider" th:if="${demoEnabled}">
+        <span>ou</span>
+    </div>
+
+    <form
+        th:if="${demoEnabled}"
+        th:action="@{/demo-login}"
+        method="post"
+        aria-label="Acesso de demonstração"
+    >
+        <button class="demo-button" type="submit">
+            Acessar demonstração
+        </button>
+
+        <p class="demo-copy">
+            Explore o sistema com dados de exemplo. Alterações ficam bloqueadas.
+        </p>
+    </form>
+
     <p class="restricted">
-        Acesso restrito aos administradores.
+        A conta administrativa permanece restrita.
     </p>
 
 </section>
