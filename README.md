@@ -238,7 +238,7 @@ O GitHub Actions executa a suíte em H2 e repete a migração contra PostgreSQL 
 
 ## 🚀 Deploy
 
-O ambiente público roda no alwaysdata como um **serviço Java 21 ativo continuamente**, publicado por um **proxy reverso** e conectado a uma instância PostgreSQL 17 da própria plataforma.
+O ambiente público roda no plano gratuito do alwaysdata como um site do tipo **Programa de usuário**, com Java 21 e PostgreSQL 17 da própria plataforma.
 
 Fluxo de publicação:
 
@@ -247,16 +247,14 @@ GitHub Actions valida testes e migrações
     ↓
 Maven gera o JAR executável
     ↓
-Proxy reverso do alwaysdata recebe o tráfego HTTPS
+Site Programa de usuário recebe o tráfego HTTPS
     ↓
-Serviço Java 21 executa a aplicação continuamente
-    ↓
-Spring Boot
+Spring Boot escuta em IPv6 e na porta fornecida por $PORT
     ↓
 PostgreSQL 17 + Flyway
 ```
 
-O proxy força HTTPS, e a aplicação reconhece os cabeçalhos encaminhados para não gerar redirecionamentos inseguros. O serviço usa uma porta IPv6 fixa, monitoramento com reinício automático, limites explícitos da JVM e inicialização preguiçosa. Essa arquitetura evita o atraso de inicialização causado pela suspensão por inatividade do modelo anterior.
+O site força HTTPS, e a aplicação reconhece os cabeçalhos encaminhados para não gerar redirecionamentos inseguros. O tempo de inatividade está configurado como `0`, e limites explícitos da JVM mantêm o processo dentro dos recursos do plano gratuito. A própria documentação do alwaysdata ressalta que esse modo reduz suspensões por inatividade, mas não equivale a uma garantia de disponibilidade ou SLA.
 
 O endpoint público `/actuator/health` é reservado ao healthcheck e não expõe detalhes internos. O procedimento reproduzível de publicação, validação e rollback está em [`docs/deploy-alwaysdata.md`](docs/deploy-alwaysdata.md).
 
