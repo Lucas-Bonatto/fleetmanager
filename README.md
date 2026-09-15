@@ -12,9 +12,9 @@ A aplicação está hospedada no alwaysdata, com Java 21, PostgreSQL 17 e HTTPS 
 
 ### [Acessar o Controle de Frotas](https://fleetmanager-lucasbonatto.alwaysdata.net)
 
-> O ambiente público possui acesso protegido por autenticação.
+> Na tela de login, use **Acessar demonstração** para conhecer o sistema em modo somente leitura, sem criar conta ou informar senha.
 >
-> As credenciais administrativas não são divulgadas no repositório.
+> Não há cadastro público. As credenciais administrativas permanecem restritas e não são divulgadas no repositório.
 
 ## 📋 Funcionalidades
 
@@ -28,6 +28,7 @@ A aplicação está hospedada no alwaysdata, com Java 21, PostgreSQL 17 e HTTPS 
 - Alertas automáticos de tributos e manutenções.
 - Validação para impedir a redução acidental do hodômetro.
 - Login administrativo com Spring Security.
+- Acesso público de demonstração, autenticado e somente leitura.
 - Logout seguro com encerramento da sessão.
 - Interface responsiva para computadores e dispositivos móveis.
 - Banco PostgreSQL no ambiente público.
@@ -122,6 +123,7 @@ O sistema utiliza:
 - senhas processadas com BCrypt;
 - proteção CSRF;
 - sessão autenticada;
+- perfil de demonstração limitado a consultas, com bloqueio de escrita no servidor;
 - logout por requisição POST;
 - credenciais de produção armazenadas em variáveis de ambiente;
 - conexão HTTPS no ambiente público.
@@ -187,7 +189,10 @@ PGUSER=usuario
 PGPASSWORD=senha
 ADMIN_USERNAME=usuario_administrativo
 ADMIN_PASSWORD=senha_administrativa
+DEMO_ACCESS_ENABLED=true
 ```
+
+`DEMO_ACCESS_ENABLED` vem desativado por padrão. Ative-o somente em um ambiente de portfólio com dados apropriados para exibição pública; essa opção não cria usuários nem concede acesso administrativo.
 
 Na hospedagem, as variáveis são configuradas diretamente na plataforma. Os valores reais, especialmente `PGPASSWORD` e `ADMIN_PASSWORD`, não são versionados nem exibidos nos exemplos do repositório.
 

@@ -14,7 +14,7 @@
     <main class="main-content">
         <header class="page-header">
             <div><span class="eyebrow">VISÃO OPERACIONAL</span><h1>Dashboard da frota</h1><p>Alertas financeiros e mecânicos em um único painel.</p></div>
-            <a class="button primary" th:href="@{/vehicles/new}">+ Novo veículo</a>
+            <a class="button primary" th:if="${!readOnlyMode}" th:href="@{/vehicles/new}">+ Novo veículo</a>
         </header>
         <div th:replace="~{fragments/common :: alerts}"></div>
 

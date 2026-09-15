@@ -75,9 +75,12 @@ APP_SEED_ENABLED=false
 FLYWAY_BASELINE_ON_MIGRATE=false
 ADMIN_USERNAME=<usuario-administrativo>
 ADMIN_PASSWORD=<segredo>
+DEMO_ACCESS_ENABLED=true
 ```
 
 Use `APP_SEED_ENABLED=true` apenas quando o ambiente público for destinado à demonstração com dados de exemplo. Em uma instalação de produção real, mantenha `false`.
+
+`DEMO_ACCESS_ENABLED=true` habilita o botão público de demonstração. O visitante recebe uma sessão autenticada com permissão apenas para consultar o dashboard e as listagens; formulários e operações de escrita continuam restritos ao administrador. Mantenha a opção desativada em ambientes que contenham dados reais ou confidenciais.
 
 Não inclua senhas em commits, logs, capturas de tela ou solicitações de suporte.
 
@@ -94,8 +97,9 @@ O retorno esperado contém `"status":"UP"`. Verifique também que:
 1. `http://<dominio>` responde com redirecionamento permanente para HTTPS;
 2. a raiz HTTPS redireciona para `/login` mantendo o protocolo HTTPS;
 3. `/login` responde com HTTP 200;
-4. o serviço está ativo, sem pausa, e o monitor não apresenta um ciclo de reinicializações;
-5. os logs registram o schema Flyway atualizado e não apresentam encerramento por falta de memória.
+4. quando `DEMO_ACCESS_ENABLED=true`, o botão **Acessar demonstração** abre o dashboard e as tentativas de acessar formulários ou enviar alterações são recusadas;
+5. o serviço está ativo, sem pausa, e o monitor não apresenta um ciclo de reinicializações;
+6. os logs registram o schema Flyway atualizado e não apresentam encerramento por falta de memória.
 
 Os logs do processo ficam disponíveis no painel do alwaysdata e em:
 
